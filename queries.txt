@@ -1,0 +1,53 @@
+Q1:
+SELECT PACKAGE (D)
+FROM inter_diet_table D
+SUCH THAT
+SUM(calories) >= 2200 AND
+SUM(calories) <= 2450
+MINIMIZE SUM(cost);
+
+Q2:
+SELECT PACKAGE (D)
+FROM inter_diet_table D
+SUCH THAT
+SUM(fat) <= 50 AND
+SUM(protein) >= 150 AND
+SUM(calories) BETWEEN 1000 AND 1100
+MAXIMIZE COUNT(*);
+
+Q3:
+SELECT PACKAGE (D)
+FROM inter_diet_table D
+SUCH THAT
+SUM(protein) >= 40 AND
+SUM(protein) <= 70 AND
+SUM(carbs) >=  225 AND
+SUM(carbs) <= 325 AND
+SUM(fat) <= 50
+MAXIMIZE SUM(calories);
+
+Q4:
+SELECT PACKAGE (D)
+FROM inter_diet_table D
+SUCH THAT
+SUM(protein) >= 70 AND
+SUM(protein) <= 80 AND
+SUM(carbs) >=  0 AND
+SUM(carbs) <= 70 AND
+SUM(fat) >= 90 AND
+SUM(fat) <= 110 AND
+COUNT(*) = 5
+MAXIMIZE SUM(calories);
+
+Q5:
+SELECT PACKAGE (D)
+FROM inter_diet_table D
+SUCH THAT
+SUM(fat) >= 15 AND
+SUM(fat) <= 15 AND
+SUM(carbs) >=  6 AND
+SUM(carbs) <= 6 AND
+SUM(calories) >= 100 AND
+SUM(calories) <= 101 AND
+COUNT(*) = 5
+MAXIMIZE SUM(protein);

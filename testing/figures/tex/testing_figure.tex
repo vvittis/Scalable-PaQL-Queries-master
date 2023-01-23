@@ -1,0 +1,213 @@
+% This file was created with tikzplotlib v0.9.12.
+\begin{tikzpicture}
+
+\begin{groupplot}[group style={group size=5 by 1}]
+\nextgroupplot[
+height=15cm,
+minor xtick={},
+minor ytick={},
+tick pos=left,
+title={Q1},
+width=15cm,
+x grid style={white!69.0196078431373!black},
+xlabel={Dataset Size},
+xmajorgrids,
+xmin=60, xmax=940,
+xtick style={color=black},
+xtick={100,300,700,900},
+xticklabels={10.0\%,30.0\%,70.0\%,100\%},
+y grid style={white!69.0196078431373!black},
+ylabel={Value of Objective Function},
+ymin=12.9, ymax=37.1,
+ytick style={color=black},
+ytick={10,15,20,25,30,35,40}
+]
+\addplot [line width=1.5pt, red, dotted, mark=x, mark size=6, mark options={solid}]
+table {%
+100 36
+200 32
+300 32
+400 28
+500 17
+600 16
+700 14
+800 14
+900 14
+};
+\addplot [line width=1.5pt, blue, dashed, mark=*, mark size=2.5, mark options={solid}]
+table {%
+100 36
+200 36
+300 33
+400 29
+500 21
+600 16
+700 16
+800 15
+900 15
+};
+
+\nextgroupplot[
+height=15cm,
+minor xtick={},
+minor ytick={},
+tick pos=left,
+title={Q2},
+width=15cm,
+x grid style={white!69.0196078431373!black},
+xlabel={Dataset Size},
+xmajorgrids,
+xmin=60, xmax=940,
+xtick style={color=black},
+xtick={100,300,700,900},
+xticklabels={10.0\%,30.0\%,70.0\%,100\%},
+y grid style={white!69.0196078431373!black},
+ylabel={Value of Objective Function},
+ymin=20.45, ymax=76.55,
+ytick style={color=black},
+ytick={20,30,40,50,60,70,80}
+]
+\addplot [line width=1.5pt, red, dotted, mark=x, mark size=6, mark options={solid}]
+table {%
+100 23
+200 33
+300 44
+400 49
+500 56
+600 61
+700 63
+800 67
+900 74
+};
+\addplot [line width=1.5pt, blue, dashed, mark=*, mark size=2.5, mark options={solid}]
+table {%
+100 23
+200 33
+300 44
+400 49
+500 54
+600 58
+700 56
+800 58
+900 61
+};
+
+\nextgroupplot[
+height=15cm,
+minor xtick={},
+minor ytick={},
+tick pos=left,
+title={Q3},
+width=15cm,
+x grid style={white!69.0196078431373!black},
+xlabel={Dataset Size},
+xmajorgrids,
+xmin=60, xmax=940,
+xtick style={color=black},
+xtick={100,300,700,900},
+xticklabels={10.0\%,30.0\%,70.0\%,100\%},
+y grid style={white!69.0196078431373!black},
+ylabel={Value of Objective Function},
+ymin=2196.25, ymax=2718.75,
+ytick style={color=black},
+ytick={2100,2200,2300,2400,2500,2600,2700,2800}
+]
+\addplot [line width=1.5pt, red, dotted, mark=x, mark size=6, mark options={solid}]
+table {%
+100 2220
+200 2250
+300 2320
+400 2635
+500 2655
+600 2670
+700 2690
+800 2695
+900 2695
+};
+\addplot [line width=1.5pt, blue, dashed, mark=*, mark size=2.5, mark options={solid}]
+table {%
+100 2220
+200 2250
+300 2315
+400 2625
+500 2640
+600 2650
+700 2675
+800 2680
+900 2560
+};
+
+\nextgroupplot[
+height=15cm,
+minor xtick={},
+minor ytick={},
+tick pos=left,
+title={Q4},
+width=15cm,
+x grid style={white!69.0196078431373!black},
+xlabel={Dataset Size},
+xmajorgrids,
+xmin=60, xmax=940,
+xtick style={color=black},
+xtick={100,300,700,900},
+xticklabels={10.0\%,30.0\%,70.0\%,100\%},
+y grid style={white!69.0196078431373!black},
+ylabel={Value of Objective Function},
+ymin=1607.25, ymax=1777.75,
+ytick style={color=black},
+ytick={1600,1620,1640,1660,1680,1700,1720,1740,1760,1780}
+]
+\addplot [line width=1.5pt, red, dotted, mark=x, mark size=6, mark options={solid}]
+table {%
+100 1615
+200 1695
+300 1720
+400 1750
+500 1750
+600 1750
+700 1770
+800 1770
+900 1770
+};
+\addplot [line width=1.5pt, blue, dashed, mark=*, mark size=2.5, mark options={solid}]
+table {%
+100 1615
+200 1665
+300 1665
+400 1675
+500 1675
+600 1675
+700 1700
+800 1700
+900 1700
+};
+
+\nextgroupplot[
+height=15cm,
+minor xtick={},
+minor ytick={},
+tick pos=left,
+title={Q5},
+width=15cm,
+x grid style={white!69.0196078431373!black},
+xlabel={Dataset Size},
+xmajorgrids,
+xmin=0, xmax=900,
+xtick style={color=black},
+xtick={100,300,700,900},
+xticklabels={10.0\%,30.0\%,70.0\%,100\%},
+y grid style={white!69.0196078431373!black},
+ylabel={Value of Objective Function},
+ymin=0, ymax=1,
+ytick style={color=black},
+ytick={0,0.2,0.4,0.6,0.8,1},
+yticklabels={0.0,0.2,0.4,0.6,0.8,1.0}
+]
+\end{groupplot}
+
+\draw ({$(current bounding box.south west)!0.5!(current bounding box.south east)$}|-{$(current bounding box.south west)!0.98!(current bounding box.north west)$}) node[
+  anchor=north,
+  text=black,
+  rotate=0.0
+]{\bfseries Comparison between Direct and Greedy IPM};
+\end{tikzpicture}

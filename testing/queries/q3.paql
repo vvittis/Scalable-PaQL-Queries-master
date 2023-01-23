@@ -1,0 +1,6 @@
+SELECT PACKAGE (D)
+FROM inter_diet_table D
+SUCH THAT SUM(protein) BETWEEN 40 AND 70
+AND SUM(carbs) BETWEEN  225 AND 325
+AND SUM(fat) <= 50
+MAXIMIZE SUM(calories);

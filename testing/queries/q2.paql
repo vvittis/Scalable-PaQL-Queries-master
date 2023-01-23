@@ -1,0 +1,6 @@
+SELECT PACKAGE (D)
+FROM inter_diet_table D
+SUCH THAT SUM(fat) <= 50
+AND SUM(protein) >= 150
+AND SUM(calories) BETWEEN 1000 AND 1100
+MAXIMIZE COUNT(*);

@@ -1,0 +1,4 @@
+SELECT PACKAGE (D)
+FROM inter_diet_table D
+SUCH THAT SUM(calories) BETWEEN 2200 AND 2450
+MINIMIZE SUM(cost);
