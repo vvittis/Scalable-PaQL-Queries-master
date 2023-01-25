@@ -60,8 +60,9 @@ class ILPDirectRunInfo(SearchRunInfo):
     def strlist(self):
         s = [
             "* ILP Direct - Specific Search Run Info:",
-            "  Max problem size: {} vars".format(self.CPLEX_run_info.cplex_problem_size),
+            "  Max problem size:    {} vars".format(self.CPLEX_run_info.cplex_problem_size),
             "  ILP solving wc time: {} s".format(self.ILP_problem_solving_wc_time),
+
         ]
         for x in self.CPLEX_run_info.strlist():
             s.append("  {}".format(x))

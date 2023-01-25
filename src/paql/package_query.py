@@ -100,7 +100,7 @@ class PackageQuery(object):
     @classmethod
     def get_json_from_paql(cls, paql_str):
         from subprocess import Popen, PIPE
-        # print(paql_str)
+        print(paql_str)
         p = Popen(["bin/PaQL_Parser"], stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True, universal_newlines=True)
         # print("PIPE       " + str(PIPE))
 
@@ -121,7 +121,7 @@ class PackageQuery(object):
         :param paql_str: A string containing a PaQL query
         :rtype : PackageQuery
         """
-        print(paql_str)
+        # print(paql_str)
         json_str = PackageQuery.get_json_from_paql(paql_str)
 
         try:
@@ -229,7 +229,7 @@ class PackageQuery(object):
             "repeats": rel_repeats,
             "limit": q["LIMIT"],
         }
-        print(query_dict)
+        # print(query_dict)
         if such_that_clause.is_conjunctive() and where_clause.is_conjunctive():
             return ConjunctivePackageQuery(query_dict)
         else:
@@ -259,7 +259,7 @@ class PackageQuery(object):
             else:
                 raise Exception("Operator '{}' not supported yet.".format(op))
             gc_queries.append(gc_query)
-            print(gc_queries)
+            # print(gc_queries)
             gc_ranges.append(gc_range)
 
         return PackageQuery({

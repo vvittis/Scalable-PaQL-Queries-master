@@ -32,7 +32,6 @@ def main():
 
     # Parse arguments
     args, other_args = parser.parse_known_args()
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ " + str(args) + " ? "+ str(other_args))
     # Override experimental DB name
     if args.experiment_dbname is not None:
         exp_dbms_settings["dbname"] = args.experiment_dbname
@@ -68,10 +67,9 @@ def main():
         # experiment_module = import_module(exp_module_name)
         # print(experiment_module.tests)
         cwd = os.getcwd()
-        print("Cwd" + cwd)
-        os.chdir("/Users/vasilisvittis/PycharmProjects/Scalable-PaQL-Queries-master")
+        os.chdir(cwd[:-8])
         experiment = DirectExperiment(pool, args.experiment_folder, args.experiment_file)
-        print(experiment)
+        # print(experiment)
         # for ExperimentClass in experiment_module.tests:
         # experiment = ExperimentClass(pool, args.experiment_folder, args.experiment_file)
         # assert isinstance(experiment, Experiment)
@@ -84,7 +82,7 @@ def main():
         # print("---------------------------------------------------------")
         # print("# Experiment Running...")
         # print("---------------------------------------------------------")
-        print("Other args"+ str(other_args))
+        # print("Other args"+ str(other_args))
         # Run the test experiment
         experiment.start()
         try:

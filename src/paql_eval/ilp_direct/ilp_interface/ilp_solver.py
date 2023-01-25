@@ -284,7 +284,7 @@ class ILPPackageProblem(object):
 			# Add global constraints
 			self.add_global_constraints()
 
-			print ("TODO: YOU SHOULD PROBABLY CLEAN DATA HERE, BUT FOR NOW I'M DISABLING IT")
+			# print ("TODO: YOU SHOULD PROBABLY CLEAN DATA HERE, BUT FOR NOW I'M DISABLING IT")
 			self.clear_data()
 
 			# Problem must be a (M)ILP ((Mixed) Integer Linear Program)

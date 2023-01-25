@@ -61,8 +61,8 @@ def incremental_packagebuilder_testing():
         # print(package_tuples)
         package = pd.read_sql_query('SELECT * FROM inter_diet_table WHERE temp_id IN (' + my_str + ')', con=connection)
         package_df = pd.DataFrame(package)
-        print(package_df)
-        print(last_line)
+        # print(package_df)
+        # print(last_line)
         print("Fetching data from Package Builder. Done")
         sleep(1)
         # Delete all data with which you run Package Builder

@@ -32,8 +32,8 @@ def get_optimal_package__process(search_class, __init__kwargs, init_kwargs, sear
 
     # Send query initialization info right away
     opt_init_info = search.get_init_info()
-    print(search_class)
-    print(opt_init_info, type(opt_init_info))
+    # print(search_class)
+    # print(opt_init_info, type(opt_init_info))
     parent_conn[1].send({
         "status": "init",
         "opt_init_info": opt_init_info,
@@ -98,6 +98,7 @@ def check_pid_memory_usage__process(pid, mem_limit, parent_conn):
     # print "\n>>> CHECKING MEMORY USAGE OF SOLVER PROCESS pid =", pid
 
     start_time = time.time()
+    # print("Start time "+str(start_time))
 
     i = 0
     proc = psutil.Process(pid)
@@ -190,9 +191,7 @@ def get_optimal_package_in_subprocess_and_monitor_memory_usage(
         yield init_result
 
         # Second, we get the run info
-        print(">" * 100)
         run_result = solver_parent_conn.recv()
-        print(">" * 100)
 
     # except Exception as e:
     except (KeyboardInterrupt, SystemExit) as e:
@@ -214,7 +213,7 @@ def get_optimal_package_in_subprocess_and_monitor_memory_usage(
             "exception": SubprocessKilled(),
         }
 
-    print("SUBPROCESS RESULT STATUS:", run_result["status"])
+    # print("SUBPROCESS RESULT STATUS:", run_result["status"])
 
     # Make sure the memory check process always terminates
     try:
@@ -242,6 +241,6 @@ def get_optimal_package_in_subprocess_and_monitor_memory_usage(
     # Close process connections
     solver_parent_conn.close()
     checker_parent_conn.close()
-    print("run_result: ")
-    print("YIELDING RESULTS:", run_result)
+    # print("run_result: ")
+    # print("YIELDING RESULTS:", run_result.__str__())
     yield run_result

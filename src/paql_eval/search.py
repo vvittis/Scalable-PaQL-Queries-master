@@ -59,13 +59,15 @@ class SearchRunInfo(object):
 
     def start(self):
         self.wallclock_time_started = time.time()  # in seconds
+        # print(">>>>>>>>>>>>>>>>>> Callclock_time_started: " + str(self.wallclock_time_started))
         self.cputicks_time_started = time.clock()
+        # print(">>>>>>>>>>>>>>>>>> Cputicks_time_started: " + str(self.cputicks_time_started))
 
     def strlist(self):
         s = [
             "* General Search Run Info:",
             "  Wallclock started = {}".format(self.wallclock_time_started),
-            "  Cputicks started = {}".format(self.cputicks_time_started),
+            "  Cputicks started  = {}".format(self.cputicks_time_started),
         ]
         for t in self.info_packages:
             s.append("  * Package info:")
@@ -282,7 +284,7 @@ class Search(object):
             del rinfo
 
     def enumerate_package_space(self, timelimit=None, *args, **kwargs):
-        info(">>> SEARCHING {}.enumerate_package_space()...".format(self.__class__.__name__))
+        # info(">>> SEARCHING {}.enumerate_package_space()...".format(self.__class__.__name__))
         package_generator = self.enumerate_package_space_hook(*args, **kwargs)
         for p in self._generic_package_generator(timelimit, package_generator):
             print(p)
@@ -337,21 +339,21 @@ class Search(object):
         raise NotImplemented
 
     def get_optimal_package(self, timelimit=None, *args, **kwargs):
-        print()
-        print("*" * 50)
-        print(" GET OPTIMAL PACKAGE STARTED")
-        print("*" * 50)
+        # print()
+        # print("*" * 50)
+        # print(" GET OPTIMAL PACKAGE STARTED")
+        # print("*" * 50)
 
         assert self.query.objective is not None, "get_optimal_package() can be called only on optimization queries"
         info(">>> SEARCHING {}.get_optimal_package()...".format(self.__class__.__name__))
 
         def package_generator():
-            print("inside")
+            # print("inside")
             yield self.get_optimal_package_hook(*args, **kwargs)
 
         packages = []
         for p in self._generic_package_generator(timelimit, package_generator()):
-            print("package ",str(p))
+            print("package ", str(p))
             packages.append(p)
         assert len(packages) == 1
         return packages[0]

@@ -30,8 +30,8 @@ def tail_experiment(exp):
     while True:
         stdout.seek(printed_until)
 
-        for line in stdout:
-            print(line),  # do not print(newline twice
+        # for line in stdout:
+            # print(line),  # do not print(newline twice
         printed_until = stdout.tell()
 
         # Stop if experiment is not running
@@ -43,9 +43,9 @@ def tail_experiment(exp):
 
         time.sleep(0.5)
 
-    # print(last lines from experiment (if any)
-    for line in stdout:
-        print(line)
+    # # print(last lines from experiment (if any)
+    # for line in stdout:
+    #     print(line)
 
     stdout.close()
 
@@ -149,8 +149,8 @@ def proc_restore(args, port):
         "dumps",  # NOTE: this assumes that folder "dumps" is always used
         outfilename)
 
-    print(datasets_directory_path)
-    print(os.path.join(datasets_directory_path, "dump"))
+    # print(datasets_directory_path)
+    # print(os.path.join(datasets_directory_path, "dump"))
 
     newargs = [ "pg_restore"] + ([ "-p", port ] if port else []) + [
         "-F", "c",  # "Custom" format for pg_dump
@@ -174,7 +174,7 @@ def proc_restore(args, port):
             to_dbname, schemaname, tablename, table_size, "dumps")
         expdb.commit()
 
-    print(" ".join(newargs))
+    # print(" ".join(newargs))
 
     return newargs, callback
 
@@ -212,7 +212,7 @@ def source(script, update=True, clean=True):
     data = pipe.communicate()[0]
 
     env = dict((line.split("=", 1) for line in data.splitlines()))
-    print(env)
+    # print(env)
 
     if clean:
         # remove unwanted minimal vars

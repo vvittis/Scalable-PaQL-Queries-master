@@ -396,12 +396,16 @@ class ILPPackageProblemCplexPy(ILPPackageProblem):
         # Solve the problem with CPLEX
         if not feas_opt and not conflict_refine:
             # Just use the standard CPLEX solve() procedure
-            print("inside")
-            print("Running CPLEX solve()...")
-            print(50 * ">>")
+            # print("inside")
+            # print("Running CPLEX solve()...")
+            # print(50 * ">>")
 
-            print(self.problem.solve())
-            print("Objective Value " + str(self.problem.solution.get_status()))
+            self.problem.solve()
+            # self.problem.set_log_stream(None)
+            # self.problem.set_error_stream(None)
+            # self.problem.set_warning_stream(None)
+            # self.problem.set_results_stream(None)
+            # print("Objective Value " + str(self.problem.solution.get_status()))
 
         # Solve with CPLEX Feasopt
         elif feas_opt:
@@ -421,7 +425,7 @@ class ILPPackageProblemCplexPy(ILPPackageProblem):
         # Solve after removing constraints with Conflict Refine
         elif conflict_refine:
             self.remove_conflicting_global_constraints()
-            verbose_log("Running CPLEX solve()...")
+            verbose_log("1Running CPLEX solve()...")
             self.problem.solve()
 
         self.n_solver_solve_calls += 1
@@ -508,10 +512,12 @@ class CPLEXRunInfo:
 
     def strlist(self):
         return [
-            "* CPLEX Run Info:",
-            "  CPLEX wall-clock time: {}".format(self.cplex_wallclock_time),
-            "  CPLEX det-ticks time: {}".format(self.cplex_detticks_time),
-            "  CPLEX problem size: {}".format(self.cplex_problem_size),
+            "* CPLEX Run Info: ",
+            "  CPLEX wall-clock time: {} ".format(self.cplex_wallclock_time),
+            "  CPLEX det-ticks  time: {} ".format(self.cplex_detticks_time),
+            "  CPLEX problem    size: {} ".format(self.cplex_problem_size),
+            "  SYS   wall-clock time: {} ".format(self.sys_wallclock_time),
+            "  SYS   cpu-tickes time: {} ".format(self.sys_wallclock_time)
         ]
 
     def __str__(self):

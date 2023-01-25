@@ -18,8 +18,11 @@ import pandas as pd
 # SEEDS = [0.96, 0.25, 0.77, 0.99, 0.29, 0.21, 0.16, 0.1, 0.4, 0.3]
 
 # SEEDS = [0.11, 0.64, 0.47, 0.9, 0.63, 0.2, 0.42, 0.68, 0.53, 0.57]
-SEEDS = [0.11, 0.64, 0.47]
 
+# SEEDS = [0.65, 0.89, 0.61, 0.03, 0.18, 0.55, 0.13, 0.72, 0.5, 0.09]
+
+SEEDS = [0.65, 0.89, 0.61, 0.03,0.18]
+DATASET = "ad"
 
 def take_input():
     print('Do you have a conf already?')
@@ -27,8 +30,11 @@ def take_input():
     if conf_option == 'y' or conf_option == 'Y':
         experiment_name = "exp_1"
         step = "100"
-        initial_size = "100"
-        query_file = "q4.paql"
+        initial_size = "2000"
+        query_file = "q1.paql"
+        # exp_1, q4.paql, 100, 100
+        # exp_2, q4.paql, 800, 50
+
         complete_where_clause = " exp_name = '" + experiment_name + "'" + " AND query_file = '" + query_file + "'" + " AND initial_size = '" + initial_size + "'" + " AND step = '" + step + "'"
     else:
         # Experiment number
@@ -91,12 +97,12 @@ def setup_tests():
     print(experiment_dataframe)
 
     # seed_selection(experiment_dataframe)
-
+    # print(SEEDS)
     for index, row in experiment_dataframe.iterrows():
         obj = read_query(row.query_file)
-        # acc_incremental_packagebuilder_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
-        incremental_packagebuilder_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
-        # incremental_direct_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
+        # # acc_incremental_packagebuilder_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
+        # incremental_packagebuilder_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
+        incremental_direct_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
     # setup_plot(experiment_dataframe)
 
 
@@ -112,7 +118,7 @@ def seed_selection(experiment_dataframe):
             temp_random_table = '"copy_table_diet_' + str(int(random_state * 100)) + '"'
             cursor.execute('select setseed(' + str(random_state) + ')')
             connection.commit()
-            cursor.execute('create table if not exists' + temp_random_table + ' AS SELECT * FROM "diet" ORDER BY RANDOM()')
+            cursor.execute('create table if not exists' + temp_random_table + ' AS SELECT * FROM "diet_dataset" ORDER BY RANDOM()')
             connection.commit()
             index = 0
             for index, row in experiment_dataframe.iterrows():
@@ -154,16 +160,17 @@ def read_query(query_file):
             for line in input:
                 output.write(line)
                 objective = line[0:3]
-                if objective == 'MIN':
-                    print("MIN")
-                elif objective == 'MAX':
-                    print("MAX")
+                # if objective == 'MIN':
+                #     print("MIN")
+                # elif objective == 'MAX':
+                #     print("MAX")
     return objective
 
 
 def init_results_table(connection, cursor, exp_id):
     table_name = "results_exp_id_" + str(exp_id)
-    cursor.execute("CREATE TABLE IF NOT EXISTS " + table_name + "( exp_id INT, seed FLOAT, function VARCHAR(20), iteration INT, obj_value FLOAT, solution TEXT, status BOOLEAN, sol_size INT);")
+    cursor.execute(
+        "CREATE TABLE IF NOT EXISTS " + table_name + "( exp_id INT, seed FLOAT, function VARCHAR(20), iteration INT, obj_value FLOAT, solution TEXT, status BOOLEAN, sol_size INT, loading_wc_time FLOAT, solving_wc_time FLOAT);")
     connection.commit()
     return table_name
 
@@ -187,7 +194,7 @@ def incremental_packagebuilder_testing(obj, exp_id, exp_name, query_file, initia
     cursor = connection.cursor()
     table_name = init_results_table(connection, cursor, exp_id)
     # execute query
-    count_lines = pd.read_sql_query('select count(*) from "diet"', con=connection)
+    count_lines = pd.read_sql_query('select count(*) from "diet_dataset"', con=connection)
 
     seeds = pd.DataFrame(SEEDS)
 
@@ -201,7 +208,7 @@ def incremental_packagebuilder_testing(obj, exp_id, exp_name, query_file, initia
         temp_random_table = '"copy_table_diet_' + str(int(randomstate * 100)) + '"'
         cursor.execute('select setseed(' + str(randomstate) + ')')
         connection.commit()
-        cursor.execute('create table if not exists' + temp_random_table + ' AS SELECT * FROM "diet" ORDER BY RANDOM()')
+        cursor.execute('create table if not exists' + temp_random_table + ' AS SELECT * FROM "diet_dataset" ORDER BY RANDOM()')
         connection.commit()
 
         for i in range(initial_size, int(count_lines.values), step):
@@ -218,9 +225,10 @@ def incremental_packagebuilder_testing(obj, exp_id, exp_name, query_file, initia
                 print("Insertion to intermediate table from " + str(i - step + 1) + " to " + str(i) + ". Done")
 
             # Execute Package Builder
-            start = time.clock()
+            start = time.time()
+            print("Before call_direct: " + str(start))
             call_direct(i, randomstate, exp_id, exp_name, query_file, initial_size, step, 'IPM')
-            print(start)
+
             print("Executing Package Builder, Method Direct. Done")
             # Read data from results table
             package_raw = pd.read_sql_query('select obj_value, solution, sol_size from ' + table_name + ' where exp_id = ' + str(exp_id) + ' and seed = ' + str(randomstate) + ' and iteration = ' + str(
@@ -283,9 +291,9 @@ def call_direct(iteration, random_state, experiment_id, experiment_name, query_f
 
     args = ['/usr/bin/env', 'python', '-m', 'src.experiments.run_experiments', '--run-now', 'paql_eval', 'direct', '-q', 'query.paql', str(experiment_id), experiment_name, query_file, str(initial_size), str(step),
             str(function), str(random_state), str(iteration)]
-    print("Inside here len(args) " + str(args))
+    # print("Inside here len(args) " + str(args))
     p = subprocess.Popen(args, env=os.environ, shell=False)  # calls run_experiments.py
-    print(p.args)
+    # print(p.args)
     # a = dir(p)
     # print(a)
     while p.poll() is None:
@@ -295,7 +303,6 @@ def call_direct(iteration, random_state, experiment_id, experiment_name, query_f
 
         except (KeyboardInterrupt, SystemExit) as e:
             print((KeyboardInterrupt, SystemExit))
-            print("lol")
             p.send_signal(signal.SIGINT)
             # p.wait()
             if sshtunnel is not None:
@@ -326,7 +333,7 @@ def incremental_direct_testing(obj, exp_id, exp_name, query_file, initial_size, 
     cursor = connection.cursor()
     table_name = init_results_table(connection, cursor, exp_id)
     # execute query
-    count_lines = pd.read_sql_query('select count(*) from "diet"', con=connection)
+    count_lines = pd.read_sql_query('select count(*) from "diet_dataset"', con=connection)
 
     seeds = pd.DataFrame(SEEDS)
 
@@ -340,7 +347,7 @@ def incremental_direct_testing(obj, exp_id, exp_name, query_file, initial_size, 
         temp_random_table = '"copy_table_diet_' + str(int(randomstate * 100)) + '"'
         cursor.execute('select setseed(' + str(randomstate) + ')')
         connection.commit()
-        cursor.execute('create table if not exists' + temp_random_table + ' AS SELECT * FROM "diet" ORDER BY RANDOM()')
+        cursor.execute('create table if not exists' + temp_random_table + ' AS SELECT * FROM "diet_dataset" ORDER BY RANDOM()')
         connection.commit()
 
         for i in range(initial_size, int(count_lines.values), step):
@@ -410,10 +417,10 @@ def acc_incremental_packagebuilder_testing(obj, exp_id, exp_name, query_file, in
     connection = psycopg2.connect(host="localhost", port="5432", database="Diet", user="postgres")
     cursor = connection.cursor()
     # execute query
-    count_lines = pd.read_sql_query('select count(*) from "diet"', con=connection)
+    count_lines = pd.read_sql_query('select count(*) from "diet_dataset"', con=connection)
 
     dataset = pd.read_sql_query(
-        'select * from "diet" where id between (0) and (' + str(int(count_lines.values)) + ')',
+        'select * from "diet_dataset" where id between (0) and (' + str(int(count_lines.values)) + ')',
         con=connection)
     df = pd.DataFrame(dataset)
     seeds = pd.DataFrame(SEEDS)

@@ -14,7 +14,7 @@ from src.paql_eval.sketch_refine.sketch_refine import *
 from src.utils.log import *
 
 PROCESS_RESIDENT_MEMORY_LIMIT = -1  # NO MEMORY LIMIT
-# PROCESS_RESIDENT_MEMORY_LIMIT = 200 * 1024 * 1024 # 200 MB
+# PROCESS_RESIDENT_MEMORY_LIMIT = 1000 * 1024 * 1024 # 200 MB
 
 SOLVING_TIME_LIMIT = None  # NO TIME LIMIT
 
@@ -55,7 +55,7 @@ class PaQLEvalExperiment(Experiment):
 
     def end(self, results):
         # Get init results and merge with recovered init info
-        print("WOW " + str(self.other_args))
+        # print("WOW " + str(self.other_args))
         init_result = next(results)
         init_info = {}
         if "opt_init_info" in init_result:
@@ -122,7 +122,7 @@ class PaQLEvalExperiment(Experiment):
                     if (len(self.other_args) > 0):
                         print("Random State " + random_state)
                         cursor.execute(
-                            'insert into ' + table_name + ' (exp_id,seed,function, iteration,obj_value,solution, status,sol_size) VALUES( %s, %s, %s, %s, %s, %s, %s, %s)',
+                            'insert into ' + table_name + ' (exp_id,seed,function, iteration,obj_value,solution, status,sol_size ) VALUES( %s, %s, %s, %s, %s, %s, %s, %s )',
                             (int(exp_id), float(random_state), str(function), int(iteration), None,
                              None, bool(0),
                              int(0)))
@@ -139,16 +139,16 @@ class PaQLEvalExperiment(Experiment):
         else:
             raise Exception("Unknown status '{}'".format(run_result["status"]))
 
-        print()
-        print("SUCCESS:", success)
-        print("STATUS:", bt_status)
-        print("SOL SIZE:", len(candidate_combo))
-        print("SOLUTION:", candidate_combo)
-        print("OBJ VAL:", candidate_obj_val)
+        # print()
+        # print("SUCCESS:", success)
+        # print("STATUS:", bt_status)
+        # print("SOL SIZE:", len(candidate_combo))
+        # print("SOLUTION:", candidate_combo)
+        # print("OBJ VAL:", candidate_obj_val)
 
-        print(self.other_args)
+        # print(self.other_args)
         exp_id = self.other_args[0]
-        print(exp_id)
+        # print(exp_id)
         exp_name = self.other_args[1]
         query_file = self.other_args[2]
         initial_size = self.other_args[3]
@@ -160,16 +160,18 @@ class PaQLEvalExperiment(Experiment):
         cursor = connection.cursor()
         table_name = "results_exp_id_" + str(exp_id)
         temp_cand = ",".join(str(x) for x in candidate_combo)
-
-
+        problem_loading_wc_time = init_info['ILP_problem_loading_wc_time']
+        problem_solving_wc_time = runinfo.ILP_problem_solving_wc_time
         if (len(self.other_args) > 0):
-            print("Random State " + random_state)
+            # print("Random State " + random_state)
             cursor.execute(
-                'insert into ' + table_name + ' (exp_id,seed,function, iteration,obj_value,solution, status,sol_size) VALUES( %s, %s, %s, %s, %s, %s, %s, %s)',
+                'insert into ' + table_name + ' (exp_id,seed,function, iteration,obj_value,solution, status,sol_size, loading_wc_time , solving_wc_time) VALUES( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                 (int(exp_id), float(random_state), str(function), int(iteration), float(candidate_obj_val), temp_cand, bool(bt_status),
-                 int(len(candidate_combo))))
+                 int(len(candidate_combo)), float(problem_loading_wc_time), float(problem_solving_wc_time)))
             connection.commit()
+        print(int(exp_id), float(random_state), str(function), int(iteration), float(candidate_obj_val), temp_cand, bool(bt_status),int(len(candidate_combo)), float(problem_loading_wc_time), float(problem_solving_wc_time))
 
-        print("INIT INFO:\n", init_info)
-        print()
-        print("RUN INFO:\n", str(runinfo))
+        # print("ILP_problem_loading_wc_time " + str(init_info['ILP_problem_loading_wc_time']))
+        # print(init_info.__str__())
+        # print(" ILP solving wc time     " + str(runinfo.ILP_problem_solving_wc_time))
+        # print(runinfo.__str__())
