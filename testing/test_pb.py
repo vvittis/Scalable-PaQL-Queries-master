@@ -101,8 +101,8 @@ def setup_tests():
     for index, row in experiment_dataframe.iterrows():
         obj = read_query(row.query_file)
         # # acc_incremental_packagebuilder_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
-        # incremental_packagebuilder_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
-        incremental_direct_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
+        incremental_packagebuilder_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
+        # incremental_direct_testing(obj, row.id, row.exp_name, row.query_file, row.initial_size, row.step)
     # setup_plot(experiment_dataframe)
 
 
